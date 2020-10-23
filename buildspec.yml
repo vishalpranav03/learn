@@ -6,9 +6,14 @@ phases:
   install:
     runtime-versions:
       nodejs: 14
+    commands:
+      - echo Installing mocha..
+      - npm install -g mocha
   pre_build:
     commands:
       # Install Snyk
+      - echo Installing NPM dependencies
+      - npm install
       - echo Install Snyk
       - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
       - chmod -R +x ./snyk
@@ -16,10 +21,12 @@ phases:
       - ./snyk config set api="$SNYKAPI"
   build:
     commands:
-      - echo Build started on `date`
+      - echo Running Snyk
       - ./snyk test
+      - echo Build started on 'date'
+      - echo Compiling on 'date'
+      - mocha index.js
   post_build:
     commands:
-      # Take these images and push them to Docker hub
-      - echo Pushing the Docker images...
-      #- docker push yourname/dkr-scanned-react-container-image
+      - echo Build complete on 'date'
+      
