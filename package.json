@@ -6,6 +6,9 @@
   "scripts": {
     "start": "node index.js"
   },
+  "dependencies": {
+    "adm-zip": "0.4.7"
+  }, 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/johnpapa/node-hello.git"
