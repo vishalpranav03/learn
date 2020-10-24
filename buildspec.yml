@@ -2,12 +2,15 @@ version: 0.2
 env:
   secrets-manager:
     DOCKER: dockerp:docker
+    SNYK: snyk:snyk
 phases: 
   build: 
     commands: 
       - echo Build started on `date`
       - echo Building the Docker image
       - docker build -t vishalpranav03/snyk .
+      - echo Running Snyk
+      - ./snyk test --docker snyk --file=Dockerfile
       - docker tag vishalpranav03/snyk vishalpranav03/snyk:latest
   post_build: 
     commands: 
@@ -18,5 +21,10 @@ phases:
     commands: 
       - echo Logging in to Docker Hub
       - docker login --username="vishalpranav03" --password=$DOCKER
+      - echo Installing Snyk
+      - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
+      - chmod -R +x ./snyk
+      # Snyk auth
+      - ./snyk config set api="$SNYKAPI"
 
 
