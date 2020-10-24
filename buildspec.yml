@@ -8,7 +8,7 @@ phases:
     commands: 
       - echo Build started on `date`
       - echo Building the Docker image
-      - docker build -t vishalpranav03/snyk .
+      - docker build --build-arg snyk_auth_token=$SNYK -t vishalpranav03/snyk .
       - docker tag vishalpranav03/snyk vishalpranav03/snyk:latest
       #- ./snyk test --docker node:4.6
   post_build: 
