@@ -19,9 +19,8 @@ phases:
     commands: 
       - echo Logging in to Docker Hub
       - docker login --username="vishalpranav03" --password=$DOCKER
-      # Install Snyk
-      #- echo Install Snyk
-      #- curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
-      #- chmod -R +x ./snyk
+      - echo Install Snyk
+      - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
+      - chmod -R +x ./snyk
       # Snyk auth
-      #- ./snyk config set api="$SNYK_AUTH_TOKEN"
+      - ./snyk config set api="$SNYK_AUTH_TOKEN"
