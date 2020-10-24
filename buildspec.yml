@@ -2,7 +2,7 @@ version: 0.2
 env:
   secrets-manager:
    DOCKER: dockerp:docker
-   #SNYK: snyk:snyk
+   SNYK: snykapi:snyk
 phases: 
   build: 
     commands: 
@@ -23,4 +23,4 @@ phases:
       - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
       - chmod -R +x ./snyk
       # Snyk auth
-      - ./snyk config set api="$SNYK_AUTH_TOKEN"
+      - ./snyk config set api=$SNYK
