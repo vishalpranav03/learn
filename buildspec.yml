@@ -12,12 +12,12 @@ phases:
       - docker tag vishalpranav03/snyk vishalpranav03/snyk:latest
   post_build: 
     commands: 
-      - echo Build completed on `date`"
-      - echo Pushing the Docker image..."
-      - docker push vishalpranav03/snyk:latest"
+      - echo Build completed on `date`
+      - echo Pushing the Docker image
+      - docker push vishalpranav03/snyk:latest
   pre_build: 
     commands: 
-      - echo Logging in to Docker Hub..."
+      - echo Logging in to Docker Hub
       - docker login --username="vishalpranav03" --password=$DOCKER
       # Install Snyk
       #- echo Install Snyk
