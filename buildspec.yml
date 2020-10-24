@@ -2,7 +2,7 @@ version: 0.2
 env:
   secrets-manager:
     SNYKAPI: secrets-name:snyk
-    DOCKER: secrets-name:dockerp
+    DOCKER: secrets-name:docker
 phases: 
   build: 
     commands: 
