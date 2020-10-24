@@ -10,7 +10,7 @@ phases:
       - echo Building the Docker image
       - docker build -t vishalpranav03/snyk .
       - docker tag vishalpranav03/snyk vishalpranav03/snyk:latest
-      - ./snyk test --docker node:4.6
+      #- ./snyk test --docker node:4.6
   post_build: 
     commands: 
       - echo Build completed on `date`
@@ -20,8 +20,8 @@ phases:
     commands: 
       - echo Logging in to Docker Hub
       - docker login --username="vishalpranav03" --password=$DOCKER
-      - echo Install Snyk
-      - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
-      - chmod -R +x ./snyk
+      #- echo Install Snyk
+      #- curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
+      #- chmod -R +x ./snyk
       # Snyk auth
-      - ./snyk config set api=$SNYK
+      #- ./snyk config set api=$SNYK
