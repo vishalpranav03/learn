@@ -1,19 +1,23 @@
---- 
+version: 0.2
+env:
+  secrets-manager:
+    SNYKAPI: secrets-name:snyk
+    DOCKER: secrets-name:dockerp
 phases: 
   build: 
     commands: 
-      - "echo Build started on `date`"
-      - "echo Building the Docker image..."
-      - "docker build -t dvohra/node-server ."
-      - "docker tag dvohra/node-server dvohra/node-server:latest"
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - docker build -t vishalpranav03/snyk .
+      - docker tag vishalpranav03/snyk vishalpranav03/snyk:latest
   post_build: 
     commands: 
-      - "echo Build completed on `date`"
-      - "echo Pushing the Docker image..."
-      - "docker push dvohra/node-server:latest"
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push dvohra/node-server:latest
   pre_build: 
     commands: 
-      - "echo Logging in to Docker Hub..."
-      - "docker login --username=\"dvohra\" --password=\"password\""
-version: 0.1
+      - echo Logging in to Docker Hub..."
+      - docker login --username="vishalpranav03" --password=$DOCKER
+
 
