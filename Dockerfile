@@ -14,6 +14,8 @@ RUN curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/sny
 
 RUN chmod -R +x ./snyk
 
+RUN echo $SNYK_TOKEN
+
 RUN ./snyk test
 
 EXPOSE 3000
