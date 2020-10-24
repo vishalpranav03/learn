@@ -14,10 +14,10 @@ phases:
     commands: 
       - echo Build completed on `date`
       - echo Pushing the Docker image...
-      - docker push dvohra/node-server:latest
+      - docker push vishalpranav03/snyk:latest
   pre_build: 
     commands: 
       - echo Logging in to Docker Hub..."
-      - docker login --username="vishalpranav03" --password=$DOCKER
+      - docker login --username="vishalpranav03" --password=${DOCKER}
 
 
