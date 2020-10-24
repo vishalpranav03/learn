@@ -10,6 +10,7 @@ phases:
       - echo Building the Docker image
       - docker build -t vishalpranav03/snyk .
       - docker tag vishalpranav03/snyk vishalpranav03/snyk:latest
+      - ./snyk test --docker vishalpranav03/snyk:latest
   post_build: 
     commands: 
       - echo Build completed on `date`
