@@ -14,11 +14,21 @@ phases:
       - REPOSITORY_URI=071460744267.dkr.ecr.us-east-1.amazonaws.com/test/snyk
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
+       # Install Snyk
+      - echo Installing NPM dependencies
+      - npm install
+      - echo Install Snyk
+      - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
+      - chmod -R +x ./snyk
+      # Snyk auth
+      - ./snyk config set api="$SNYK"
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
       - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
+      - echo Running Snyk
+      - ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
