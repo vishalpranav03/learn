@@ -8,6 +8,7 @@ phases:
       docker: 19
   pre_build:
     commands:
+       # Loggin in to ECR
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
