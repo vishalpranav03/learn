@@ -8,7 +8,7 @@ phases:
       docker: 19
   pre_build:
     commands:
-       # Loggin in to ECR
+       # Logging in to ECR
       - echo Logging in to Amazon ECR...
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
@@ -29,7 +29,7 @@ phases:
       - echo Building the Docker image...
       - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
       - echo Running Snyk
-     # - ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
+      - ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
@@ -38,7 +38,7 @@ phases:
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
-      - echo Writing image definitions file...
-      - printf '[{"name":"testing-snyk","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
-artifacts:
-    files: imagedefinitions.json
+      #- echo Writing image definitions file...
+      #- printf '[{"name":"testing-snyk","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+#artifacts:
+#    files: imagedefinitions.json
