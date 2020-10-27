@@ -7,7 +7,7 @@ ENV SNYK_TOKEN=${snyk_auth_token}
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install app dependencies
+## Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
 COPY package*.json ./
