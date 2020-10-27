@@ -1,0 +1,6 @@
+[
+  {
+    "name": "snyk-test-cont",
+    "imageUri": "071460744267.dkr.ecr.us-east-1.amazonaws.com/test/snyk:latest"
+  }
+]
