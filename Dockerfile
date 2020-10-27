@@ -1,4 +1,4 @@
-FROM node:buster-slim
+FROM node:4.6
 
 ARG snyk_auth_token
 
