@@ -13,11 +13,13 @@ phases:
       - aws --version
       - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
       - REPOSITORY_URI=071460744267.dkr.ecr.us-east-1.amazonaws.com/test/snyk
+      # Storing the commit hash
       - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
       - IMAGE_TAG=${COMMIT_HASH:=latest}
        # Installing NPM Dependencies
       - echo Installing NPM dependencies
       - npm install
+      # Downloading Snyk
       - echo Install Snyk
       - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
       - chmod -R +x ./snyk
@@ -27,14 +29,18 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
+      # Building the image and scanning the dependencies with with Snyk
       - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
+      # Scanning the built dockerfile and the base image.
       - echo Running Snyk
       - ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
+      # Check if the build stage is successful
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
       - echo Build completed on `date`
+      # Pushing the image to ECR
       - echo Pushing the Docker images...
       - docker push $REPOSITORY_URI:latest
       - docker push $REPOSITORY_URI:$IMAGE_TAG
