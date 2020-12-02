@@ -5,7 +5,7 @@ env:
    UP: "pgsvishal@gmail.com:HK42uu46cwEpVf9x30e95066"
    H1: "Accept:application/json"
    H2: "Content-Type:application/json"
-   D: "{\"fields\":{\"summary\":\"Summit 2019 is awesome!\",\"issuetype\":{\"name\":\"Task\"},\"project\":{\"key\":\"TCP\"},\"description\":{\"type\":\"doc\",\"version\": 1,\"content\":[{\"type\":\"paragraph\",\"content\":[{\"text\":\"This is the description.\",\"type\":\"text\"}]}]}}}"
+   #D: {"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version": 1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}}
   secrets-manager:
    SNYK: snyk:snykapi
 phases:
@@ -47,7 +47,7 @@ phases:
       - echo $CODEBUILD_BUILD_SUCCEEDING
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
       - echo $U
-      - curl --request POST --url $U --user $UP --header $H1 --header $H2 --data $D
+      - curl --request POST --url $U --user $UP --header $H1 --header $H2 --data '{"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version": 1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}}'
       - echo Build completed on `date`
       # Pushing the image to ECR
     # - echo Pushing the Docker images...
