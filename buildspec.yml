@@ -38,7 +38,8 @@ phases:
   post_build:
     commands:
       # Check if the build stage is successful
-      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
+      - echo $CODEBUILD_BUILD_SUCCEEDING
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"0/" ]; then exit 1; fi"
       - curl localhost
       - echo Build completed on `date`
       # Pushing the image to ECR
