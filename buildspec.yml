@@ -1,0 +1,46 @@
+version: 0.2
+env:
+  secrets-manager:
+   SNYK: snyk:snykapi
+phases:
+  install:
+    runtime-versions:
+      docker: 19
+  pre_build:
+    commands:
+       # Logging in to ECR
+      - echo Logging in to Amazon ECR...
+      - aws --version
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - REPOSITORY_URI=071460744267.dkr.ecr.us-east-1.amazonaws.com/test/snyk
+      # Storing the commit hash
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+       # Installing NPM Dependencies
+      - echo Installing NPM dependencies
+      - npm install
+      # Downloading Snyk
+      - echo Install Snyk
+      - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
+      - chmod -R +x ./snyk
+      # Snyk auth
+      - ./snyk config set api="$SNYK"
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      # Building the image and scanning the dependencies with with Snyk
+      - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
+      # Scanning the built dockerfile and the base image.
+      - echo Running Snyk
+      - ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
+      - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+  post_build:
+    commands:
+      # Check if the build stage is successful
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
+      - echo Build completed on `date`
+      # Pushing the image to ECR
+      - curl --request POST --url 'https://vishalpranav.atlassian.net/rest/api/3/issue' --user 'pgsvishal@gmail.com:HK42uu46cwEpVf9x30e95066' --header 'Accept: application/json' --header 'Content-Type: application/json' --data '{"fields": {"summary": "Summit 2019 is awesome!","issuetype": {"name": "Task"},"project":{"key": "TCP"},"description": {"type": "doc","version": 1,"content": [{"type": "paragraph","content": [{"text": "This is the description.","type":"text"}]}]}}}'
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
