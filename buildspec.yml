@@ -2,7 +2,7 @@ version: 0.2
 env:
   variables:
    U: "https://vishalpranav.atlassian.net/rest/api/3/issue"
-   #UP: "pgsvishal@gmail.com:HK42uu46cwEpVf9x30e95066"
+   UP: "pgsvishal@gmail.com:HK42uu46cwEpVf9x30e95066"
    #H1: "Accept: application/json"
    #H2: "Content-Type: application/json"
    #D: "{"fields": {"summary": "Summit 2019 is awesome!","issuetype": {"name": "Task"},"project":{"key": "TCP"},"description": {"type": "doc","version": 1,"content": [{"type": "paragraph","content": [{"text": "This is the description.","type":"text"}]}]}}}" 
@@ -47,7 +47,7 @@ phases:
       - echo $CODEBUILD_BUILD_SUCCEEDING
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
       - echo $U
-      - curl --request POST --url '$U' --user '$UP' --header '$H1' --header '$H2' --data '$D'
+      - curl --request POST --url $U --user '$UP' --header '$H1' --header '$H2' --data '$D'
       - echo Build completed on `date`
       # Pushing the image to ECR
     # - echo Pushing the Docker images...
