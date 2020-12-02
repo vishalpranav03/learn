@@ -46,7 +46,7 @@ phases:
       # Check if the build stage is successful
       - echo $CODEBUILD_BUILD_SUCCEEDING
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
-      - curl --request POST --url $U --user $UP --header $H1 --header $H2 --data $D
+      - curl --request POST --url '$U' --user '$UP' --header '$H1' --header '$H2' --data '$D'
       - echo Build completed on `date`
       # Pushing the image to ECR
     # - echo Pushing the Docker images...
