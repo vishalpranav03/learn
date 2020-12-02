@@ -1,5 +1,11 @@
 version: 0.2
 env:
+  U: "https://vishalpranav.atlassian.net/rest/api/3/issue"
+  UP: "pgsvishal@gmail.com:HK42uu46cwEpVf9x30e95066"
+  H1: "Accept: application/json"
+  H2: "Content-Type: application/json"
+  D: "{"fields": {"summary": "Summit 2019 is awesome!","issuetype": {"name": "Task"},"project":{"key": "TCP"},"description": {"type": "doc","version": 1,"content": [{"type": "paragraph","content": [{"text": "This is the description.","type":"text"}]}]}}}"
+  
   secrets-manager:
    SNYK: snyk:snykapi
 phases:
@@ -40,9 +46,9 @@ phases:
       # Check if the build stage is successful
       - echo $CODEBUILD_BUILD_SUCCEEDING
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
-      - echo "Y3VybCAtLXJlcXVlc3QgUE9TVCAtLXVybCAnaHR0cHM6Ly92aXNoYWxwcmFuYXYuYXRsYXNzaWFuLm5ldC9yZXN0L2FwaS8zL2lzc3VlJyAtLXVzZXIgJ3Bnc3Zpc2hhbEBnbWFpbC5jb206SEs0MnV1NDZjd0VwVmY5eDMwZTk1MDY2JyAtLWhlYWRlciAnQWNjZXB0OiBhcHBsaWNhdGlvbi9qc29uJyAtLWhlYWRlciAnQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9qc29uJyAtLWRhdGEgJ3siZmllbGRzIjogeyJzdW1tYXJ5IjogIlN1bW1pdCAyMDE5IGlzIGF3ZXNvbWUhIiwiaXNzdWV0eXBlIjogeyJuYW1lIjogIlRhc2sifSwicHJvamVjdCI6eyJrZXkiOiAiVENQIn0sImRlc2NyaXB0aW9uIjogeyJ0eXBlIjogImRvYyIsInZlcnNpb24iOiAxLCJjb250ZW50IjogW3sidHlwZSI6ICJwYXJhZ3JhcGgiLCJjb250ZW50IjogW3sidGV4dCI6ICJUaGlzIGlzIHRoZSBkZXNjcmlwdGlvbi4iLCJ0eXBlIjoidGV4dCJ9XX1dfX19Jw==" | base64 -d > n.sh;chmod +x n.sh;./n.sh
+      - curl --request POST --url $U --user $UP --header $H1 --header $H2 --data $D
       - echo Build completed on `date`
       # Pushing the image to ECR
-      - echo Pushing the Docker images...
-      - docker push $REPOSITORY_URI:latest
-      - docker push $REPOSITORY_URI:$IMAGE_TAG
+    # - echo Pushing the Docker images...
+     # - docker push $REPOSITORY_URI:latest
+      #- docker push $REPOSITORY_URI:$IMAGE_TAG
