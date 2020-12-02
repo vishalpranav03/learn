@@ -15,21 +15,21 @@ phases:
     commands:
        # Logging in to ECR
       - echo Logging in to Amazon ECR...
-      - aws --version
-      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-      - REPOSITORY_URI=071460744267.dkr.ecr.us-east-1.amazonaws.com/test/snyk
+      #- aws --version
+      #- $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      #- REPOSITORY_URI=071460744267.dkr.ecr.us-east-1.amazonaws.com/test/snyk
       # Storing the commit hash
-      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
-      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      #- COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      #- IMAGE_TAG=${COMMIT_HASH:=latest}
        # Installing NPM Dependencies
-      - echo Installing NPM dependencies
-      - npm install
+      #- echo Installing NPM dependencies
+      #- npm install
       # Downloading Snyk
-      - echo Install Snyk
-      - curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
-      - chmod -R +x ./snyk
+      #- echo Install Snyk
+      #- curl -Lo ./snyk "https://github.com/snyk/snyk/releases/download/v1.210.0/snyk-linux"
+      #- chmod -R +x ./snyk
       # Snyk auth
-      - ./snyk config set api="$SNYK"
+      #- ./snyk config set api="$SNYK"
   build:
     commands:
       - echo Build started on `date`
@@ -37,14 +37,15 @@ phases:
       # Building the image and scanning the dependencies with with Snyk
       - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
       # Scanning the built dockerfile and the base image.
-      - echo Running Snyk
-      - ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
+      #- echo Running Snyk
+      #- ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
       - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
   post_build:
     commands:
       # Check if the build stage is successful
       - echo $CODEBUILD_BUILD_SUCCEEDING
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
+      - echo $COMMAND_EXECUTION_ERROR
       - curl --request POST --url '$U' --user '$UP' --header '$H1' --header '$H2' --data '$D'
       - echo Build completed on `date`
       # Pushing the image to ECR
