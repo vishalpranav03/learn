@@ -5,7 +5,6 @@ env:
    UP: "pgsvishal@gmail.com:HK42uu46cwEpVf9x30e95066"
    H1: "Accept:application/json"
    H2: "Content-Type:application/json"
-   D: D='{"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version":1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}}'
   secrets-manager:
    SNYK: snyk:snykapi
 phases:
@@ -31,10 +30,12 @@ phases:
       #- chmod -R +x ./snyk
       # Snyk auth
       #- ./snyk config set api="$SNYK"
+      - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
   build:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
+      - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
       #- D='{"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version":1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}}'
       # Building the image and scanning the dependencies with with Snyk
       - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
@@ -48,7 +49,7 @@ phases:
       - echo $CODEBUILD_BUILD_SUCCEEDING
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
       - echo $U
-      - curl --request POST --url $U --user $UP --header $H1 --header $H2 --data $D
+      - curl --request POST --url $U --user $UP --header $H1 --header $H2 --data 'D='{"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version":1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}}''
       - echo Build completed on `date`
       # Pushing the image to ECR
     # - echo Pushing the Docker images...
