@@ -34,7 +34,7 @@ phases:
     commands:
       - echo Build started on `date`
       - echo Building the Docker image...
-      - D=$({"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version":1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}})
+      - D='{"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version":1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}}'
       # Building the image and scanning the dependencies with with Snyk
       - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
       # Scanning the built dockerfile and the base image.
