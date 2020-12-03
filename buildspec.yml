@@ -38,7 +38,7 @@ phases:
       - bash -c "if [ /"$CODEBUILD_BUILD_SUCCEEDING/" == /"1/" ]; then exit 1; fi"
       #- D='{"fields":{"summary":"Summit 2019 is awesome!","issuetype":{"name":"Task"},"project":{"key":"TCP"},"description":{"type":"doc","version":1,"content":[{"type":"paragraph","content":[{"text":"This is the description.","type":"text"}]}]}}}'
       # Building the image and scanning the dependencies with with Snyk
-      - docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
+      #- docker build --build-arg snyk_auth_token=$SNYK -t $REPOSITORY_URI:latest .
       # Scanning the built dockerfile and the base image.
       #- echo Running Snyk
       #- ./snyk test --docker $REPOSITORY_URI:latest --file=Dockerfile
